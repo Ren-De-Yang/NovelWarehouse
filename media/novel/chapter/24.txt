@@ -1,0 +1,102 @@
+enable // 進入特權模式
+configure terminal // 進入全域設定模式
+
+
+// 設定時鐘(特權模式)
+show clock // 顯示現在時間
+clock set 15:00:00 Jan 2035 // 設定時間
+
+
+// 檢查設定(特權模式)
+show running-config // 檢查目前交換器設定
+show startup-config // 檢查記憶體交換器設定
+
+
+// 設定交換器名稱(全域設定模式)
+hostname S1
+
+
+// 設定主控台密碼(全域設定模式)
+line console 0 // 進入console-line模式
+password letmein // 設定密碼
+login
+
+
+// 設定特權模式密碼(全域設定模式)
+enable password cl$c0
+
+
+// 加密密碼(全域設定模式)
+enable secret itsasecret // 設定加密密碼，會覆蓋"特權模式密碼"
+service password-encryption
+
+
+// 設定標語(全域設定模式)
+banner notd "This is a secure..."
+
+
+// 儲存設定檔(全域設定模式)
+copy running-config startup-config
+
+
+// 設定交換器ip(全域設定模式)
+interface vlan 1 // 進入vlan模式
+ip address 192.168.1.253 255.255.255.0 // 設定ip
+no shutdown // 啟動介面
+
+
+// 防止DNS查詢(全域設定模式)
+no ip domain-lookup
+
+// 設定VTY telnet密碼(全域設定模式)
+line vty 0 4 //進入console line模式
+password cisco
+login
+
+
+
+
+
+
+
+
+計算網路位置
+排網路設備位置
+叉網卡(右下為S0/0/0)
+配線(先差為DCE，要設定介面位置)
+在Desktop/IP Configuration 設定PC IP, Subnet mask, Default gateway
+
+路由器設定
+enable
+configure terminal
+hostname S1
+
+interface f0/0
+ip address default-gateway subunet-mask
+no shutdown
+
+interface s0/0/0
+ip address ipv4 subunet-mask
+clock rate 64000
+no shutdown
+
+設定密碼(config)
+enable secret class
+line console 0
+password cisco
+login
+exit
+line vty 0 4
+password cisco
+login
+transport input ssh
+exit
+service password-encryption
+
+設定靜態路由
+ip route 目的網段 子網路遮罩 下一跳位置或出口介面
+ex: ip route 192.168.36.0 255.255.255.128 192.168.36.234
+ex: ip route 192.168.36.0 255.255.255.128 s1/0
+
+
+
